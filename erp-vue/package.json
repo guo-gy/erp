@@ -10,12 +10,14 @@
   "dependencies": {
     "vue": "",
     "vue-router": "",
-    "vuex": "",
     "axios": "",
-    "element-plus": ""
+    "element-plus": "",
+    "vue-chartjs": "",
+    "chart.js": ""
   },
   "devDependencies": {
     "@vue/cli": "",
     "@vue/cli-service": ""
-  }
+  },
+  "author": "guogy"
 }

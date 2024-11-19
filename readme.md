@@ -15,7 +15,7 @@
 - 前端：Vue3 + Element Plus
 - 后端：Spring Boot + MyBatis + MySQL  
 
-## ero,启动！
+## erp,启动！
 1.后端：
 ```shell
 cd erp-springboot//进入后端项目目录

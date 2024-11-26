@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.model.Product;
-import com.erp.server.ProductSever;
+import com.erp.service.ProductSever;
 
 @RestController
 @RequestMapping("/api/products")

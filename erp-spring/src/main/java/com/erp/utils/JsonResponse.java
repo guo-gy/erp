@@ -1,21 +1,38 @@
 package com.erp.utils;
 
-// 返回的json格式
 public class JsonResponse {
+    private String message;
+    private boolean success;
 
-    private final boolean success;
-    private final String message;
+    public JsonResponse() {
+    }
 
     public JsonResponse(boolean success, String message) {
         this.success = success;
         this.message = message;
     }
 
-    public boolean getSuccess() {
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isSuccess() {
         return success;
     }
 
-    public String getMessage() {
-        return message;
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    @Override
+    public String toString() {
+        return "JsonResponse{" +
+                "message='" + message + '\'' +
+                ", success=" + success +
+                '}';
     }
 }

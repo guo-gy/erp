@@ -13,6 +13,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <h1 class="home-title">欢迎来到ERP系统</h1>
                     <el-button type="danger" @click="logout">退出登录</el-button>
+                
                 </div>
             </el-header>
             <el-main>
@@ -23,18 +24,30 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
-    data() {
-        return {
-            activeMenu: 'dashboard', // 默认选中的菜单项
-        };
+  data() {
+    return {
+      activeMenu: 'dashboard', // 默认选中的菜单项
+    };
+  },
+  computed: {
+    ...mapState(['user'])
+  },
+  methods: {
+    ...mapActions(['updateUser', 'logout']),
+    handleSelect(index) {
+      this.activeMenu = index; // 更新选中的菜单项
+      this.$router.push({ name: index }); // 路由跳转
     },
-    methods: {
-        handleSelect(index) {
-            this.activeMenu = index; // 更新选中的菜单项
-            this.$router.push({ name: index }); // 路由跳转
-        },
-    },
+    logout() {
+      // 清除用户登录信息
+      localStorage.removeItem('userToken');
+      // 跳转到登录页面
+      this.$router.push({ name: 'Login' });
+    }
+  },
 };
 </script>
 

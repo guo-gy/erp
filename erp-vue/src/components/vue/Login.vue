@@ -20,6 +20,9 @@
       </el-card>
       <el-dialog title="注册" v-model="registerDialogVisible" @close="resetRegisterForm">
         <el-form class="register-form">
+          <el-form-item label="公司名" class="form-item">
+            <el-input v-model="registerCompanytname" required placeholder="请输入公司名" />
+          </el-form-item>
           <el-form-item label="用户名" class="form-item">
             <el-input v-model="registerUsername" required placeholder="请输入用户名" />
           </el-form-item>
@@ -39,11 +42,10 @@
   </el-container>
 </template>
 
-
-
 <script>
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -52,12 +54,22 @@ export default {
       password: '',
       message: '',
       registerDialogVisible: false,
+      registerCompanytname: '',
       registerUsername: '',
       registerPassword: '',
       registerrePassword: ''
     };
   },
+  computed: {
+    ...mapState(['user'])
+  },
+  created() {
+    if (this.user.userId!=null) {
+      this.$router.push('/home');
+    }
+  },
   methods: {
+    ...mapActions(['updateUser']),
     async login() {
       try {
         const response = await axios.post('http://10.27.233.81:8080/api/auth/login', {
@@ -66,6 +78,7 @@ export default {
         });
         if (response.data.success == true) {
           ElMessage.success(response.data.message);
+          this.updateUser(response.data.user);
           this.$router.push('/home');
         } else {
           ElMessage.error(response.data.message);
@@ -81,6 +94,7 @@ export default {
     async register() {
       try {
         const response = await axios.post('http://localhost:8080/api/auth/register', {
+          Companytname: this.registerCompanytname,
           username: this.registerUsername,
           password: this.registerPassword,
           repassword: this.registerrePassword

@@ -12,6 +12,7 @@ const routes = [
     name: 'Login',
     component: Login
   },
+
   {
     path: '/home',
     name: 'Home',
@@ -37,10 +38,7 @@ const routes = [
         name: 'sales-management',
         component: SalesManagement
       },
-      {
-        path: '',
-        redirect: 'home/dashboard'
-      },
+
     ]
   },
 ];
@@ -50,4 +48,4 @@ const router = createRouter({
   routes,
 });
 
-export default router; 
+export default router;

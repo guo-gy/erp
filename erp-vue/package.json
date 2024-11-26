@@ -13,7 +13,8 @@
     "axios": "",
     "element-plus": "",
     "vue-chartjs": "",
-    "chart.js": ""
+    "chart.js": "",
+    "vuex": ""
   },
   "devDependencies": {
     "@vue/cli": "",

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.erp.entity.User;
 import com.erp.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -49,7 +51,7 @@ public class UserService {
         return userRepository.findByName(name);
     }
 
-    public User getUserByCompanyId(Integer companyId) {
+    public List<User> getUserByCompanyId(Integer companyId) {
         return userRepository.findByCompanyId(companyId);
     }
 

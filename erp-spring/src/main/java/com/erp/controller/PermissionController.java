@@ -85,4 +85,33 @@ public class PermissionController {
 
     }
 
+    public JsonResponse<Integer> initPermission(Integer userId , Integer permissionLevel) {
+        JsonResponse<Integer> response = new JsonResponse<Integer>(false, "添加失败", null);
+        try {
+            User user = userService.getUserByName(request.userName);
+            if (user == null) {
+                response.message = "用户不存在";
+                return response;
+            }
+            Model model = modelService.getModelByName(request.modelName);
+            if (model == null) {
+                response.message = "模块不存在";
+                return response;
+            }
+            Permission permission = permissionService.getPermissionByUserIdAndModelId(user.getId(), model.getId());
+            if (permission == null) {
+                permission = permissionService.addPermission(user.getId(), model.getId(), request.permissionLevel);
+            } else {
+                permissionService.updPermission(permission.getId(), request.permissionLevel);
+            }
+            response.success = true;
+            response.message = "更新权限成功";
+            response.data = permission.getId();
+        } catch (Exception e) {
+            response.success = false;
+            response.message = e.getMessage();
+        }
+        return response;
+    }
+
 }

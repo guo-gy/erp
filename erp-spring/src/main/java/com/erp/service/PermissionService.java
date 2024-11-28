@@ -14,7 +14,6 @@ public class PermissionService {
     private PermissionRepository permissionRepository;
 
     // 增
-
     public Permission addPermission(Integer userId, Integer ModelId, Integer permissionLevel) {
         Permission permission = new Permission();
         permission.setUserId(userId);

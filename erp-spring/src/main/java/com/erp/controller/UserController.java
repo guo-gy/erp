@@ -169,7 +169,7 @@ public class UserController {
     // 获取公司id接口
     @GetMapping("/{company}/user")
     public JsonResponse<List<User>> getCompanyUser(@PathVariable("companyId") Integer companyId) {
-        JsonResponse<Integer> response = new JsonResponse<Integer>(false, "获取失败", null);
+        JsonResponse<List<User>> response = new JsonResponse<List<User>>(false, "获取失败", null);
         try {
             User user = userService.getUserByCompanyId(companyId);
             response.success = true;

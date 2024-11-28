@@ -171,10 +171,10 @@ public class UserController {
     public JsonResponse<List<User>> getCompanyUser(@PathVariable("companyId") Integer companyId) {
         JsonResponse<List<User>> response = new JsonResponse<List<User>>(false, "获取失败", null);
         try {
-            User user = userService.getUserByCompanyId(companyId);
+            List<User> user = userService.getUserByCompanyId(companyId);
             response.success = true;
             response.message = "获取公司id成功";
-            response.data = user.getCompanyId();
+            response.data = user;
         } catch (Exception e) {
             response.success = false;
             response.message = e.getMessage();

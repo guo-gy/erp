@@ -1,8 +1,11 @@
 package com.erp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.erp.model.Company;
+import org.springframework.stereotype.Repository;
 
-public interface CompanyRepository extends JpaRepository<Company, Long> {
+import com.erp.entity.Company;
+
+@Repository
+public interface CompanyRepository extends JpaRepository<Company, Integer> {
     Company findByName(String name);
 }

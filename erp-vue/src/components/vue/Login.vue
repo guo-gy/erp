@@ -7,7 +7,7 @@
       <el-card class="login-card">
         <el-form class="login-form">
           <el-form-item label="用户名" class="form-item">
-            <el-input v-model="username" required placeholder="请输入用户名" />
+            <el-input v-model="userName" required placeholder="请输入用户名" />
           </el-form-item>
           <el-form-item label="密码" class="form-item">
             <el-input type="password" v-model="password" required placeholder="请输入密码" />
@@ -21,10 +21,10 @@
       <el-dialog title="注册" v-model="registerDialogVisible" @close="resetRegisterForm">
         <el-form class="register-form">
           <el-form-item label="公司名" class="form-item">
-            <el-input v-model="registerCompanytname" required placeholder="请输入公司名" />
+            <el-input v-model="registercompanyName" required placeholder="请输入公司名" />
           </el-form-item>
           <el-form-item label="用户名" class="form-item">
-            <el-input v-model="registerUsername" required placeholder="请输入用户名" />
+            <el-input v-model="registeruserName" required placeholder="请输入用户名" />
           </el-form-item>
           <el-form-item label="密码" class="form-item">
             <el-input type="password" v-model="registerPassword" required placeholder="请输入密码" />
@@ -45,57 +45,62 @@
 <script>
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
     return {
-      username: '',
+      userName: '',
       password: '',
       message: '',
       registerDialogVisible: false,
-      registerCompanytname: '',
-      registerUsername: '',
+      registercompanyName: '',
+      registeruserName: '',
       registerPassword: '',
-      registerrePassword: ''
+      registerrePassword: '',
+      userId: null,
     };
   },
-  computed: {
-    ...mapState(['user'])
-  },
   created() {
-    if (this.user.userId!=null) {
+    this.userId = localStorage.getItem('userId');
+    if (this.userId != null) {
       this.$router.push('/home');
     }
   },
   methods: {
-    ...mapActions(['updateUser']),
     async login() {
-      try {
-        const response = await axios.post('http://10.27.233.81:8080/api/auth/login', {
-          username: this.username,
-          password: this.password
-        });
-        if (response.data.success == true) {
-          ElMessage.success(response.data.message);
-          this.updateUser(response.data.user);
-          this.$router.push('/home');
-        } else {
-          ElMessage.error(response.data.message);
-        }
-      } catch (error) {
-        ElMessage.error("系统异常");
+      const response = await axios.post('http://localhost:8080/api/user/login', {
+        userName: this.userName,
+        password: this.password
+      });
+      if (response.data.success == true) {
+        ElMessage.success(response.data.message);
+        localStorage.setItem('userId', response.data.data);
+        this.getCompanyId(response.data.data);
+        this.$router.push('/home');
+      } else {
+        ElMessage.error(response.data.message);
+      }
+    },
+    async getCompanyId(userId) {
+      const response = await axios.get(`http://localhost:8080/api/user/${userId}/companyid`);
+      if (response.data.success) {
+        localStorage.setItem('companyId', response.data.data);
+        ElMessage.success(response.data.message);
+      } else {
+        ElMessage.error(response.data.message);
       }
     },
     resetRegisterForm() {
-      this.registerUsername = '';
+      this.registercompanyName = '';
+      this.registeruserName = '';
+      this.registerrePassword = '';
       this.registerPassword = '';
     },
     async register() {
       try {
-        const response = await axios.post('http://localhost:8080/api/auth/register', {
-          Companytname: this.registerCompanytname,
-          username: this.registerUsername,
+        const response = await axios.post('http://localhost:8080/api/user/register', {
+          companyName: this.registercompanyName,
+          userName: this.registeruserName,
           password: this.registerPassword,
           repassword: this.registerrePassword
         });
@@ -106,13 +111,10 @@ export default {
           ElMessage.error(response.data.message);
         }
       } catch (error) {
+        console.error(error);
         ElMessage.error('系统异常');
       }
     }
   }
 };
 </script>
-
-<style scoped>
-@import '../css/Login.css';
-</style>

@@ -1,0 +1,135 @@
+body {
+    background-color: #ffffff;
+    color: #000000;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.company-management {
+    background-color: rgba(249, 249, 249, 0.9);
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 0 10px #007bff;
+}
+
+/* Element Plus 组件样式覆盖 */
+.el-button {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #ffffff;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.el-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 0 10px #007bff;
+}
+
+.el-input__inner {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: #dddddd;
+    color: #000000;
+    border-radius: 5px;
+    padding: 10px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.el-input__inner:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px #007bff;
+}
+
+.el-table {
+    background-color: rgba(249, 249, 249, 0.9);
+    color: #000000;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.el-table th, .el-table td {
+    border-color: #dddddd;
+    padding: 10px;
+}
+
+.el-message {
+    background-color: rgba(249, 249, 249, 0.9);
+    color: #000000;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.el-menu {
+    background-color: rgba(249, 249, 249, 0.9);
+    color: #000000;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.el-menu-item {
+    background-color: rgba(249, 249, 249, 0.9);
+    color: #000000;
+    padding: 10px 20px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.el-menu-item:hover {
+    background-color: rgba(224, 224, 224, 0.9);
+    box-shadow: 0 0 10px #007bff;
+}
+
+.el-submenu__title {
+    background-color: rgba(249, 249, 249, 0.9);
+    color: #000000;
+    padding: 10px 20px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.el-submenu__title:hover {
+    background-color: rgba(224, 224, 224, 0.9);
+    box-shadow: 0 0 10px #007bff;
+}
+
+.el-col {
+    background-color: rgba(249, 249, 249, 0.9);
+    color: #000000;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.el-row {
+    background-color: rgba(249, 249, 249, 0.9);
+    color: #000000;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.el-table-column {
+    background-color: rgba(249, 249, 249, 0.9);
+    color: #000000;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    transition: background-color 0.3s, border-color 0.3s;
+}

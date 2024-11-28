@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build"
   },
   "dependencies": {
     "vue": "",
@@ -17,8 +16,8 @@
     "vuex": ""
   },
   "devDependencies": {
-    "@vue/cli": "",
-    "@vue/cli-service": ""
+    "vite": "",
+    "@vitejs/plugin-vue": ""
   },
   "author": "guogy"
 }

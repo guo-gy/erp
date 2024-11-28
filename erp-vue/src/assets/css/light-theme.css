@@ -1,0 +1,65 @@
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --primary-color: #007bff;
+    --secondary-bg-color: rgba(249, 249, 249, 0.9);
+    --border-color: #ddd;
+    --box-shadow-color: rgba(0, 0, 0, 0.1);
+    --transition-duration: 0.3s;
+}
+
+.menu-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    padding-left: 20px;
+    /* 根据需要调整左侧间距 */
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-duration), color var(--transition-duration);
+}
+
+
+button {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color var(--transition-duration), box-shadow var(--transition-duration);
+}
+
+.el-card {
+    background-color: var(--secondary-bg-color);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px var(--box-shadow-color);
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.el-dialog {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px var(--box-shadow-color);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 500px;
+    width: 100%;
+    z-index: 1000;
+}
+.el-dialog {
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

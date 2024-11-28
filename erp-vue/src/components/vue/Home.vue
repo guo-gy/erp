@@ -2,20 +2,25 @@
     <el-container class="home-container">
         <el-aside width="200px">
             <el-menu :default-active="activeMenu" @select="handleSelect">
-                <el-menu-item index="dashboard">仪表盘</el-menu-item>
-                <el-menu-item index="product-management">产品管理</el-menu-item>
-                <el-menu-item index="inventory-management">库存管理</el-menu-item>
-                <el-menu-item index="sales-management">销售管理</el-menu-item>
+            <el-menu-item style="font-weight: bold; color: #409EFF;">欢迎来到ERP系统</el-menu-item>
+            <el-menu-item index="work-center">任务中心</el-menu-item>
+            <el-menu-item index="inventory-management">库存管理</el-menu-item>
+            <el-menu-item index="sales-management">销售管理</el-menu-item>
+            <el-menu-item index="purchase-management">采购管理</el-menu-item>
+            <el-menu-item index="worker-management">人员管理</el-menu-item>
+            <el-menu-item index="company-management">公司管理</el-menu-item>
+            <el-menu-item index="user-management">个人管理</el-menu-item>
             </el-menu>
         </el-aside>
+        <el-divider direction="vertical"></el-divider>
         <el-container>
             <el-header>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h1 class="home-title">欢迎来到ERP系统</h1>
+                    <h1 class="home-title">员工：{{ userName }} (隶属于：{{ companyName }})</h1>
                     <el-button type="danger" @click="logout">退出登录</el-button>
-                
                 </div>
             </el-header>
+            <el-divider></el-divider>
             <el-main>
                 <router-view />
             </el-main>
@@ -24,30 +29,52 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import axios from 'axios';
+import { ElMessage } from 'element-plus';
 
 export default {
-  data() {
-    return {
-      activeMenu: 'dashboard', // 默认选中的菜单项
-    };
-  },
-  computed: {
-    ...mapState(['user'])
-  },
-  methods: {
-    ...mapActions(['updateUser', 'logout']),
-    handleSelect(index) {
-      this.activeMenu = index; // 更新选中的菜单项
-      this.$router.push({ name: index }); // 路由跳转
+    data() {
+        return {
+            userId: localStorage.getItem('userId'),
+            companyId: localStorage.getItem('companyId'),
+            activeMenu: 'work-center',
+            userName: '获取信息失败',
+            companyName: '获取信息失败',
+        };
     },
-    logout() {
-      // 清除用户登录信息
-      localStorage.removeItem('userToken');
-      // 跳转到登录页面
-      this.$router.push({ name: 'Login' });
-    }
-  },
+    created() {
+        this.getUserName();
+        this.getCompanyName();
+        this.$router.push(`/home/work-center`);
+    },
+    methods: {
+        async getUserName() {
+            const response = await axios.get(`http://localhost:8080/api/user/${this.userId}/name`);
+            if (response.data.success) {
+                this.userName = response.data.data;
+                ElMessage.success(response.data.message);
+            } else {
+                ElMessage.error(response.data.message);
+            }
+        },
+        async getCompanyName() {
+            const response = await axios.get(`http://localhost:8080/api/company/${this.companyId}/name`);
+            if (response.data.success) {
+                this.companyName = response.data.data;
+                localStorage.setItem('companyName', response.data.data);
+                ElMessage.success(response.data.message);
+            } else {
+                ElMessage.error(response.data.message);
+            }
+        },
+        handleSelect(key) {
+            this.$router.push(`/home/${key}`);
+        },
+        async logout() {
+            localStorage.removeItem('userId');
+            this.$router.push('/');
+        },
+    },
 };
 </script>
 

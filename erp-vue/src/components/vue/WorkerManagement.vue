@@ -73,11 +73,11 @@ export default {
     },
     methods: {
         async fetchUsers() {
-            const response = await axios.get(`http://localhost:8080/api/${this.companyId}/user`);
+            const response = await axios.get(`http://localhost:8080/api/user/${this.companyId}/user`);
             this.users = response.data.data;
             for (const user of this.users) {
                 try {
-                    const response = await axios.get(`http://localhost:8080/api/${user.id}/permission`);
+                    const response = await axios.get(`http://localhost:8080/api/user/${user.id}/permission`);
                     inventory.productName = response.data.data;
                 } catch (error) {
                     inventory.productName = '获取商品名称失败';

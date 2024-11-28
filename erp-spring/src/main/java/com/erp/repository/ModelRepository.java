@@ -7,5 +7,6 @@ import com.erp.entity.Model;
 
 @Repository
 public interface ModelRepository extends JpaRepository<Model, Integer>  {
+    Model findByName(String modelName);
     
 }

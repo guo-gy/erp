@@ -9,13 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 
-import com.erp.service.PermissionService;
 import com.erp.utils.JsonResponse;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
+import com.erp.entity.User;
 import com.erp.entity.Permission;
+import com.erp.entity.Model;
+
 import com.erp.service.UserService;
+import com.erp.service.PermissionService;
+import com.erp.service.ModelService;
 
 import java.util.List;
 
@@ -26,6 +30,8 @@ public class PermissionController {
     private PermissionService permissionService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ModelService modelService;
 
     @GetMapping("/{userId}/permission")
     public JsonResponse<List<Permission>> getUserPermission(@PathVariable("userId") Integer userId) {
@@ -47,14 +53,24 @@ public class PermissionController {
         JsonResponse<Integer> response = new JsonResponse<Integer>(false, "添加失败", null);
         try {
             User user = userService.getUserByName(request.userName);
-            if(user == null){
+            if (user == null) {
                 response.message = "用户不存在";
                 return response;
-            }  
-            permissionService.updPermission(request.userName, request.model, request.permissionLevel);
+            }
+            Model model = modelService.getModelByName(request.modelName);
+            if (model == null) {
+                response.message = "模块不存在";
+                return response;
+            }
+            Permission permission = permissionService.getPermissionByUserIdAndModelId(user.getId(), model.getId());
+            if (permission == null) {
+                permission = permissionService.addPermission(user.getId(), model.getId(), request.permissionLevel);
+            } else {
+                permissionService.updPermission(permission.getId(), request.permissionLevel);
+            }
             response.success = true;
-            response.message = "添加权限成功";
-            response.data = p.getId();
+            response.message = "更新权限成功";
+            response.data = permission.getId();
         } catch (Exception e) {
             response.success = false;
             response.message = e.getMessage();
@@ -64,7 +80,7 @@ public class PermissionController {
 
     public class addPermissionRequest {
         String userName;
-        String model;
+        String modelName;
         Integer permissionLevel;
 
     }

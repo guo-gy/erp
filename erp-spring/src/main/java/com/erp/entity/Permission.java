@@ -17,7 +17,7 @@ public class Permission {
     private Integer id;
 
     private Integer userId; // 用户名
-    private Integer permissionId; // 权限ID
+    private Integer modelId; // 权限ID
     private Integer permissionLevel; // 权限等级
 
 }

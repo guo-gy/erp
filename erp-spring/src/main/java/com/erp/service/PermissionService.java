@@ -9,49 +9,47 @@ import java.util.List;
 
 @Service
 public class PermissionService {
- 
+
     @Autowired
     private PermissionRepository permissionRepository;
 
-    //增
+    // 增
 
-    public void addPermission(Integer userId, Integer permissionId, Integer permissionLevel) {
-        Permission permission =new Permission();
+    public Permission addPermission(Integer userId, Integer ModelId, Integer permissionLevel) {
+        Permission permission = new Permission();
         permission.setUserId(userId);
-        permission.setPermissionId(permissionId);
+        permission.setModelId(ModelId);
         permission.setPermissionLevel(permissionLevel);
+        return permission;
     }
 
-    //删
-    public void delPermission(Integer id)
-    {
+    // 删
+    public void delPermission(Integer id) {
         permissionRepository.deleteById(id);
     }
 
-    //改
-    public void updPermission(Integer id,Integer permissionLevel)
-    {
+    // 改
+    public void updPermission(Integer id, Integer permissionLevel) {
         Permission permission = permissionRepository.findById(id).get();
-        if(permission != null)
-        {
+        if (permission != null) {
             permission.setPermissionLevel(permissionLevel);
             permissionRepository.save(permission);
         }
-        
+
     }
-    //查
-    public Permission getPermissionById(Integer id)
-    {
+
+    // 查
+    public Permission getPermissionById(Integer id) {
         return permissionRepository.findById(id).orElse(null);
     }
-    public List<Permission> getPermissionByUserId(Integer userId)
-    {
+
+    public List<Permission> getPermissionByUserId(Integer userId) {
         return permissionRepository.findByUserId(userId);
     }
-    public Permission getPermissionByUserIdAndPermissionId(Integer userId,Integer permissionId)
-    {
+
+    public Permission getPermissionByUserIdAndModelId(Integer userId, Integer modelId) {
         for (Permission permission : permissionRepository.findByUserId(userId)) {
-            if (permission.getPermissionId().equals(permissionId)) {
+            if (permission.getModelId().equals(modelId)) {
                 return permission;
             }
         }

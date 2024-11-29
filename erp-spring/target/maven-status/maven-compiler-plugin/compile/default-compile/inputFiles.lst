@@ -2,7 +2,7 @@
 /home/guogy/erp/erp-spring/src/main/java/com/erp/config/CorsConfig.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/controller/CompanyController.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/controller/InventoryController.java
-/home/guogy/erp/erp-spring/src/main/java/com/erp/controller/ModelController.java
+/home/guogy/erp/erp-spring/src/main/java/com/erp/controller/ModuleController.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/controller/OrderController.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/controller/PermissionController.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/controller/ProductController.java
@@ -10,15 +10,15 @@
 /home/guogy/erp/erp-spring/src/main/java/com/erp/controller/WorkController.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/entity/Company.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/entity/Inventory.java
-/home/guogy/erp/erp-spring/src/main/java/com/erp/entity/Model.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/entity/Order.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/entity/Permission.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/entity/Product.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/entity/User.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/entity/Work.java
+/home/guogy/erp/erp-spring/src/main/java/com/erp/entity/module.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/repository/CompanyRepository.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/repository/InventoryRepository.java
-/home/guogy/erp/erp-spring/src/main/java/com/erp/repository/ModelRepository.java
+/home/guogy/erp/erp-spring/src/main/java/com/erp/repository/ModuleRepository.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/repository/OrderRepository.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/repository/PermissionRepository.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/repository/ProductRepository.java
@@ -26,7 +26,7 @@
 /home/guogy/erp/erp-spring/src/main/java/com/erp/repository/WorkRepository.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/service/CompanyService.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/service/InventoryService.java
-/home/guogy/erp/erp-spring/src/main/java/com/erp/service/ModelService.java
+/home/guogy/erp/erp-spring/src/main/java/com/erp/service/ModuleService.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/service/OrderService.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/service/PermissionService.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/service/ProductService.java

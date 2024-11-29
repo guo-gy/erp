@@ -5,7 +5,7 @@ DB_HOST="localhost"
 DB_USER="root"
 DB_PASS="root"
 DB_NAME="erp_db"
-TABLE_NAME="models"
+TABLE_NAME="modules"
 
 # 要检查的项
 declare -A ITEMS

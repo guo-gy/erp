@@ -12,11 +12,11 @@ import com.erp.utils.JsonResponse;
 
 import com.erp.entity.User;
 import com.erp.entity.Permission;
-import com.erp.entity.Model;
+import com.erp.entity.module;
 
 import com.erp.service.UserService;
 import com.erp.service.PermissionService;
-import com.erp.service.ModelService;
+import com.erp.service.ModuleService;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class PermissionController {
     @Autowired
     private UserService userService;
     @Autowired
-    private ModelService modelService;
+    private ModuleService moduleService;
 
     @GetMapping("/{userId}/permission")
     public JsonResponse<List<Permission>> getUserPermission(@PathVariable("userId") Integer userId) {
@@ -54,14 +54,14 @@ public class PermissionController {
                 response.message = "用户不存在";
                 return response;
             }
-            Model model = modelService.getModelByName(request.modelName);
-            if (model == null) {
+            module module = moduleService.getmoduleByName(request.moduleName);
+            if (module == null) {
                 response.message = "模块不存在";
                 return response;
             }
-            Permission permission = permissionService.getPermissionByUserIdAndModelId(user.getId(), model.getId());
+            Permission permission = permissionService.getPermissionByUserIdAndmoduleId(user.getId(), module.getId());
             if (permission == null) {
-                permission = permissionService.addPermission(user.getId(), model.getId(), request.permissionLevel);
+                permission = permissionService.addPermission(user.getId(), module.getId(), request.permissionLevel);
             } else {
                 permissionService.updPermission(permission.getId(), request.permissionLevel);
             }
@@ -77,25 +77,29 @@ public class PermissionController {
 
     public class addPermissionRequest {
         String userName;
-        String modelName;
+        String moduleName;
         Integer permissionLevel;
 
     }
 
     public void initPermission(Integer userId, Integer permissionLevel) {
         User user = userService.getUserById(userId);
-        List<Model> models = modelService.getAllmodels();
-        for (Model model : models) {
-            this.initaddpermission(user.getId(), model.getId(), permissionLevel);
+        List<module> modules = moduleService.getAllmodules();
+        System.out.println(modules);
+        for (module module : modules) {
+            System.out.println(module.getName());
+            this.initaddpermission(user.getId(), module.getId(), permissionLevel);
         }
     }
 
-    public void initaddpermission(Integer userId, Integer modelId, Integer permissionLevel) {
-        Permission permission = permissionService.getPermissionByUserIdAndModelId(userId, modelId);
+    public void initaddpermission(Integer userId, Integer moduleId, Integer permissionLevel) {
+        Permission permission = permissionService.getPermissionByUserIdAndmoduleId(userId, moduleId);
         if (permission == null) {
-            permissionService.addPermission(userId, modelId, permissionLevel);
+            permissionService.addPermission(userId, moduleId, permissionLevel);
+            System.out.println("add permission");
         } else {
             permissionService.updPermission(permission.getId(), permissionLevel);
+            System.out.println("upd permission");
         }
     }
 

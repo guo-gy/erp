@@ -14,11 +14,12 @@ public class PermissionService {
     private PermissionRepository permissionRepository;
 
     // 增
-    public Permission addPermission(Integer userId, Integer ModelId, Integer permissionLevel) {
+    public Permission addPermission(Integer userId, Integer moduleId, Integer permissionLevel) {
         Permission permission = new Permission();
         permission.setUserId(userId);
-        permission.setModelId(ModelId);
+        permission.setModuleId(moduleId);
         permission.setPermissionLevel(permissionLevel);
+        permissionRepository.save(permission);
         return permission;
     }
 
@@ -46,9 +47,9 @@ public class PermissionService {
         return permissionRepository.findByUserId(userId);
     }
 
-    public Permission getPermissionByUserIdAndModelId(Integer userId, Integer modelId) {
+    public Permission getPermissionByUserIdAndmoduleId(Integer userId, Integer moduleId) {
         for (Permission permission : permissionRepository.findByUserId(userId)) {
-            if (permission.getModelId().equals(modelId)) {
+            if (permission.getModuleId().equals(moduleId)) {
                 return permission;
             }
         }

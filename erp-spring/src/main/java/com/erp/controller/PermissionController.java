@@ -1,15 +1,12 @@
 package com.erp.controller;
 
-import java.util.PrimitiveIterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 
 import com.erp.utils.JsonResponse;
 
@@ -85,33 +82,21 @@ public class PermissionController {
 
     }
 
-    public JsonResponse<Integer> initPermission(Integer userId , Integer permissionLevel) {
-        JsonResponse<Integer> response = new JsonResponse<Integer>(false, "添加失败", null);
-        try {
-            User user = userService.getUserByName(request.userName);
-            if (user == null) {
-                response.message = "用户不存在";
-                return response;
-            }
-            Model model = modelService.getModelByName(request.modelName);
-            if (model == null) {
-                response.message = "模块不存在";
-                return response;
-            }
-            Permission permission = permissionService.getPermissionByUserIdAndModelId(user.getId(), model.getId());
-            if (permission == null) {
-                permission = permissionService.addPermission(user.getId(), model.getId(), request.permissionLevel);
-            } else {
-                permissionService.updPermission(permission.getId(), request.permissionLevel);
-            }
-            response.success = true;
-            response.message = "更新权限成功";
-            response.data = permission.getId();
-        } catch (Exception e) {
-            response.success = false;
-            response.message = e.getMessage();
+    public void initPermission(Integer userId, Integer permissionLevel) {
+        User user = userService.getUserById(userId);
+        List<Model> models = modelService.getAllmodels();
+        for (Model model : models) {
+            this.initaddpermission(user.getId(), model.getId(), permissionLevel);
         }
-        return response;
+    }
+
+    public void initaddpermission(Integer userId, Integer modelId, Integer permissionLevel) {
+        Permission permission = permissionService.getPermissionByUserIdAndModelId(userId, modelId);
+        if (permission == null) {
+            permissionService.addPermission(userId, modelId, permissionLevel);
+        } else {
+            permissionService.updPermission(permission.getId(), permissionLevel);
+        }
     }
 
 }

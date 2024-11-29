@@ -14,6 +14,7 @@ import com.erp.entity.User;
 import com.erp.service.CompanyService;
 import com.erp.utils.JsonResponse;
 import java.util.List;
+
 // 用户认证控制器
 
 @RestController
@@ -70,6 +71,8 @@ public class UserController {
         } else {
             company = companyService.addCompany(request.companyName);
             user = userService.addUser(request.userName, request.password, company.getId());
+            PermissionController permissionController = new PermissionController();
+            permissionController.initPermission(user.getId(), 1);
             response.success = true;
             response.message = "注册成功";
             response.data = user.getId();
@@ -95,6 +98,8 @@ public class UserController {
             response.message = "两次密码不一致";
         } else {
             user = userService.addUser(request.userName, request.password, company.getId());
+            PermissionController permissionController = new PermissionController();
+            permissionController.initPermission(user.getId(), -1);
             response.success = true;
             response.message = "注册成功";
             response.data = user.getId();
@@ -167,7 +172,7 @@ public class UserController {
     }
 
     // 获取公司id接口
-    @GetMapping("/{company}/user")
+    @GetMapping("/{companyId}/user")
     public JsonResponse<List<User>> getCompanyUser(@PathVariable("companyId") Integer companyId) {
         JsonResponse<List<User>> response = new JsonResponse<List<User>>(false, "获取失败", null);
         try {

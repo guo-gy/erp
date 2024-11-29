@@ -26,10 +26,12 @@ com/erp/controller/ProductController.class
 com/erp/entity/Product.class
 com/erp/service/UserService.class
 com/erp/repository/PermissionRepository.class
+com/erp/controller/PermissionController$addPermissionRequest.class
 com/erp/entity/User.class
 com/erp/controller/InventoryController.class
 com/erp/repository/ModelRepository.class
 com/erp/Application.class
+com/erp/controller/PermissionController.class
 com/erp/service/PermissionService.class
 com/erp/entity/Order.class
 com/erp/controller/UserController$updUserRequest.class

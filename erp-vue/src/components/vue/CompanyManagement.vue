@@ -42,8 +42,15 @@ export default {
     created() {
         this.id = localStorage.getItem('companyId');
         this.fetchCompanyInfo();
+        this.getPermission();
     },
     methods: {
+        async getPermission() {
+            const moduleId = 7;
+            const userId = localStorage.getItem('userId');
+            const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
+            this.permission = response.data.data;
+        },
         async fetchCompanyInfo() {
             const response = await axios.get(`http://localhost:8080/api/company/${this.id}/name`);
             if (response.data.success == true) {

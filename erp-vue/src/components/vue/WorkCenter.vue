@@ -41,8 +41,15 @@ export default {
     },
     mounted() {
         this.fetchWorks();
+        this.getPermission();
     },
     methods: {
+        async getPermission() {
+            const moduleId = 1;
+            const userId = localStorage.getItem('userId');
+            const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
+            this.permission = response.data.data;
+        },
         async fetchWorks() {
             const response = await axios.get(`http://localhost:8080/api/order/${this.userId}/target`);
             this.works = response.data.data;
@@ -64,7 +71,7 @@ export default {
             const response = await axios.post('http://localhost:8080/api/work/addwork', request);
             console.log(response);
             if (response.data.success) {
-                this.fetchInventories();
+                this.fetchWorks();
                 ElMessage.success(response.data.message);
             } else {
                 ElMessage.error(response.data.message);

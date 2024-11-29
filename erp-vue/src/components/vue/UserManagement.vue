@@ -41,8 +41,15 @@ export default {
         this.userId = localStorage.getItem('userId');
         this.companyId = localStorage.getItem('companyId');
         this.fetchUserInfo();
+        this.getPermission();
     },
     methods: {
+        async getPermission() {
+            const moduleId = 7;
+            const userId = localStorage.getItem('userId');
+            const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
+            this.permission = response.data.data;
+        },
         async fetchUserInfo() {
             const response = await axios.get(`http://localhost:8080/api/user/${this.userId}/name`);
             if (response.data.success == true) {

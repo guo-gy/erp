@@ -18,7 +18,7 @@
         <el-button @click="addOrder">新增订单</el-button>
       </el-col>
     </el-row>
-    <el-table :data="inventories" style="width: 100%">
+    <el-table :data="orders" style="width: 100%">
       <el-table-column prop="id" label="订单ID" />
       <el-table-column prop="productName" label="商品名称" />
       <el-table-column prop="originName" label="卖家" />
@@ -33,11 +33,11 @@
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 export default {
-  name: 'InventoryManagement',
+  name: 'OrderManagement',
   data() {
     return {
       companyId: localStorage.getItem('companyId'),
-      inventories: [],
+      orders: [],
       originName: '',
       productName: '',
       quantity: null,
@@ -46,8 +46,15 @@ export default {
   },
   mounted() {
     this.fetchOrders();
+    this.getPermission();
   },
   methods: {
+    async getPermission() {
+      const moduleId = 3;
+      const userId = localStorage.getItem('userId');
+      const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
+      this.permission = response.data.data;
+    },
     async fetchOrders() {
       const response = await axios.get(`http://localhost:8080/api/order/${this.companyId}/target`);
       this.orders = response.data.data;
@@ -74,7 +81,7 @@ export default {
       console.log(request);
       const response = await axios.post('http://localhost:8080/api/order/addorder', request);
       if (response.data.success) {
-        this.fetchInventories();
+        this.fetchOrders();
         ElMessage.success(response.data.message);
       } else {
         ElMessage.error(response.data.message);

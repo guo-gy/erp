@@ -1,24 +1,26 @@
 <template>
     <div>
         <h1>人员管理</h1>
+        <p>（目前开放三个权限等级，无权限<0，只读权限=0，读写权限>0</0>。）</p>
+
         <el-row :gutter="20" style="margin-bottom: 20px;">
             <el-col :span="4">
-                <el-input v-model="name" placeholder="人员名称"></el-input>
+                <el-input v-model="userName" placeholder="人员名称"></el-input>
             </el-col>
             <el-col :span="4">
-                <el-input v-model="model" placeholder="功能名称"></el-input>
+                <el-input v-model="moduleName" placeholder="功能名称"></el-input>
             </el-col>
             <el-col :span="4">
-                <el-input v-model.number="permission" placeholder="权限等级" type="number"></el-input>
+                <el-input v-model.number="permissionLevel" placeholder="权限等级" type="number"></el-input>
             </el-col>
             <el-col :span="4">
-                <el-button @click="updInventory">调整权限</el-button>
+                <el-button @click="updPermission">调整权限</el-button>
             </el-col>
             <el-col :span="8">
                 <el-button type="success" @click="registerDialogVisible = true"
                     class="register-button">注册新员工</el-button>
             </el-col>
-            <el-dialog title="注册" v-model="registerDialogVisible" @close="resetRegisterForm">
+            <el-dialog title="注册" v-model="registerDialogVisible">
                 <el-form class="register-form">
                     <el-form-item label="用户名" class="form-item">
                         <el-input v-model="registeruserName" required placeholder="请输入用户名" />
@@ -36,15 +38,24 @@
                 </el-form>
             </el-dialog>
         </el-row>
-        <el-table :data="inventories" style="width: 100%">
-            <el-table-column prop="usereName" label="人员名称" />
-            <el-table-column prop="modelName" label="功能模块" />
-            <el-table-column prop="modelLevel" label="权限等级" />
+        <el-table :data="users" style="width: 100%">
+            <el-table-column prop="userName" label="人员名称" width="150" />
+            <el-table-column label="模块权限列表" width="500">
+                <template v-slot="scope">
+                    <el-table :data="scope.row.permissions" style="width: 100%">
+                        <el-table-column prop="moduleName" label="模块名称" width="200" />
+                        <el-table-column prop="permissionLevel" label="权限等级" width="200" />
+                    </el-table>
+                </template>
+
+            </el-table-column>
+
             <el-table-column label="操作">
                 <template v-slot="scope">
-                    <el-button @click="delInventory(scope.row.id)" type="danger">删除</el-button>
+                    <el-button type="danger" @click="delUser(scope.row.id)">删除</el-button>
                 </template>
             </el-table-column>
+
         </el-table>
     </div>
 </template>
@@ -60,8 +71,8 @@ export default {
             companyId: localStorage.getItem('companyId'),
             users: [],
             userName: '',
-            modelName: '',
-            modelLevel: 0,
+            moduleName: '',
+            permissionLevel: 0,
             registeruserName: '',
             registerPassword: '',
             registerrePassword: '',
@@ -70,43 +81,50 @@ export default {
     },
     mounted() {
         this.fetchUsers();
+        this.getPermission();
     },
     methods: {
+        async getPermission() {
+            const moduleId = 4;
+            const userId = localStorage.getItem('userId');
+            const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
+            this.permission = response.data.data;
+        },
         async fetchUsers() {
             const response = await axios.get(`http://localhost:8080/api/user/${this.companyId}/user`);
             this.users = response.data.data;
+            console.log(response);
             for (const user of this.users) {
                 try {
-                    const response = await axios.get(`http://localhost:8080/api/user/${user.id}/permission`);
-                    inventory.productName = response.data.data;
+                    const response = await axios.get(`http://localhost:8080/api/permission/${user.id}/permission`);
+                    const response2 = await axios.get(`http://localhost:8080/api/user/${user.id}/name`);
+
+                    user.permissions = response.data.data;
+                    user.userName = response2.data.data;
+                    for (const permission of user.permissions) {
+                        try {
+                            const response = await axios.get(`http://localhost:8080/api/module/${permission.moduleId}/name`);
+                            permission.moduleName = response.data.data;
+                        } catch (error) {
+                            permission.moduleName = '获取模块名称失败';
+                        }
+                    }
                 } catch (error) {
-                    inventory.productName = '获取商品名称失败';
+                    user.permissions = '获取权限失败';
                 }
             }
         },
-        async updInventory() {
+        async updPermission() {
             const request = {
-                companyId: this.companyId,
-                productName: this.name,
-                quantity: this.quantity,
+                userName: this.userName,
+                moduleName: this.moduleName,
+                permissionLevel: this.permissionLevel,
             };
-            const response = await axios.post('http://localhost:8080/api/inventory/updinventory', request);
+            console.log(request);
+            const response = await axios.post('http://localhost:8080/api/permission/updpermission', request);
             console.log(response);
             if (response.data.success) {
-                this.fetchInventories();
-                ElMessage.success(response.data.message);
-            } else {
-                ElMessage.error(response.data.message);
-            }
-        },
-        async delInventory(productId) {
-            const request = {
-                companyId: this.companyId,
-                productId: productId
-            };
-            const response = await axios.post('http://localhost:8080/api/inventory/delinventory', request)
-            if (response.data.success) {
-                this.fetchInventories();
+                this.fetchUsers();
                 ElMessage.success(response.data.message);
             } else {
                 ElMessage.error(response.data.message);
@@ -130,7 +148,21 @@ export default {
                 console.error(error);
                 ElMessage.error('系统异常');
             }
-        }
+        },
+        async delUser(id) {
+            const request = {
+                id: id
+            };
+            console.log(request);
+            const response = await axios.post('http://localhost:8080/api/user/deluser', request);
+            console.log(response);
+            if (response.data.success) {
+                this.fetchUsers();
+                ElMessage.success(response.data.message);
+            } else {
+                ElMessage.error(response.data.message);
+            }
+        },
 
     },
 

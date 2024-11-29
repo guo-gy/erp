@@ -2,14 +2,14 @@
     <el-container class="home-container">
         <el-aside width="200px">
             <el-menu :default-active="activeMenu" @select="handleSelect">
-            <el-menu-item style="font-weight: bold; color: #409EFF;">欢迎来到ERP系统</el-menu-item>
-            <el-menu-item index="work-center">任务中心</el-menu-item>
-            <el-menu-item index="inventory-management">库存管理</el-menu-item>
-            <el-menu-item index="sales-management">销售管理</el-menu-item>
-            <el-menu-item index="purchase-management">采购管理</el-menu-item>
-            <el-menu-item index="worker-management">人员管理</el-menu-item>
-            <el-menu-item index="company-management">公司管理</el-menu-item>
-            <el-menu-item index="user-management">个人管理</el-menu-item>
+                <el-menu-item style="font-weight: bold; color: #409EFF;">欢迎来到ERP系统</el-menu-item>
+                <el-menu-item index="work-center">任务中心</el-menu-item>
+                <el-menu-item index="inventory-management">库存管理</el-menu-item>
+                <el-menu-item index="sales-management">销售管理</el-menu-item>
+                <el-menu-item index="purchase-management">采购管理</el-menu-item>
+                <el-menu-item index="worker-management">人员管理</el-menu-item>
+                <el-menu-item index="company-management">公司管理</el-menu-item>
+                <el-menu-item index="user-management">个人管理</el-menu-item>
             </el-menu>
         </el-aside>
         <el-divider direction="vertical"></el-divider>
@@ -54,7 +54,7 @@ export default {
                 this.userName = response.data.data;
                 ElMessage.success(response.data.message);
             } else {
-                ElMessage.error(response.data.message);
+                this.logout();
             }
         },
         async getCompanyName() {

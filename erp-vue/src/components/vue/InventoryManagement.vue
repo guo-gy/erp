@@ -1,5 +1,16 @@
 <template>
-  <div>
+  <div v-if="this.permission < 0">
+    <h1>无权限访问</h1>
+    <p>您没有权限访问此页面。</p>
+  </div>
+  <div v-if="this.permission === 0">
+    <h1>库存管理</h1>
+    <el-table :data="inventories" style="width: 100%">
+      <el-table-column prop="productName" label="商品名称" />
+      <el-table-column prop="quantity" label="数量" />
+    </el-table>
+  </div>
+  <div v-if="this.permission > 0">
     <h1>库存管理</h1>
     <el-row :gutter="20" style="margin-bottom: 20px;">
       <el-col :span="8">
@@ -31,6 +42,7 @@ export default {
   name: 'InventoryManagement',
   data() {
     return {
+      permission: -1,
       companyId: localStorage.getItem('companyId'),
       inventories: [],
       name: '',
@@ -39,9 +51,16 @@ export default {
 
   },
   mounted() {
+    this.getPermission();
     this.fetchInventories();
   },
   methods: {
+    async getPermission() {
+      const moduleId = 1;
+      const userId = localStorage.getItem('userId');
+      const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
+      this.permission = response.data.data;
+    },
     async fetchInventories() {
       const response = await axios.get(`http://localhost:8080/api/inventory/${this.companyId}`);
       this.inventories = response.data.data;
@@ -71,7 +90,7 @@ export default {
     },
     async delInventory(id) {
       const request = {
-        id:id
+        id: id
       };
       const response = await axios.post('http://localhost:8080/api/inventory/delinventory', request)
       if (response.data.success) {

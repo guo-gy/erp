@@ -17,7 +17,7 @@ import com.erp.entity.module;
 import com.erp.service.UserService;
 import com.erp.service.PermissionService;
 import com.erp.service.ModuleService;
-
+import com.erp.utils.Request.addPermissionRequest;
 import java.util.List;
 
 @RestController
@@ -38,6 +38,21 @@ public class PermissionController {
             response.success = true;
             response.message = "获取权限成功";
             response.data = permission;
+        } catch (Exception e) {
+            response.success = false;
+            response.message = e.getMessage();
+        }
+        return response;
+    }
+
+    @GetMapping("/{userId}/{moduleId}")
+    public JsonResponse<Integer> getUserModulePermission(@PathVariable("userId") Integer userId,@PathVariable("moduleId") Integer moduleId) {
+        JsonResponse<Integer> response = new JsonResponse<Integer>(false, "获取失败", null);
+        try {
+            Permission permission = permissionService.getPermissionByUserIdAndmoduleId(userId,moduleId);
+            response.success = true;
+            response.message = "获取权限成功";
+            response.data = permission.getPermissionLevel();
         } catch (Exception e) {
             response.success = false;
             response.message = e.getMessage();
@@ -73,13 +88,6 @@ public class PermissionController {
             response.message = e.getMessage();
         }
         return response;
-    }
-
-    public class addPermissionRequest {
-        String userName;
-        String moduleName;
-        Integer permissionLevel;
-
     }
 
     public void initPermission(Integer userId, Integer permissionLevel) {

@@ -33,3 +33,6 @@
 /home/guogy/erp/erp-spring/src/main/java/com/erp/service/UserService.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/service/WorkService.java
 /home/guogy/erp/erp-spring/src/main/java/com/erp/utils/JsonResponse.java
+/home/guogy/erp/erp-spring/src/main/java/com/erp/utils/Request/addPermissionRequest.java
+/home/guogy/erp/erp-spring/src/main/java/com/erp/utils/Request/addWorkRequest.java
+/home/guogy/erp/erp-spring/src/main/java/com/erp/utils/Request/updWorkRequest.java

@@ -156,6 +156,20 @@ public class UserController {
         return response;
     }
 
+    @PostMapping("/deluser")
+    public JsonResponse<Integer> delUser(@RequestBody delUserRequest request) {
+        JsonResponse<Integer> response = new JsonResponse<Integer>(false, "更新失败", null);
+        try {
+            userService.delUser(request.id);;
+            response.success = true;
+            response.message = "删除用户成功";
+        } catch (Exception e) {
+            response.success = false;
+            response.message = e.getMessage();
+        }
+        return response;
+    }
+    
     // 获取公司id接口
     @GetMapping("/{userId}/companyid")
     public JsonResponse<Integer> getCompanyId(@PathVariable("userId") Integer userId) {
@@ -205,5 +219,9 @@ public class UserController {
         public Integer userId;
         public String name;
         public String description;
+    }
+
+    public static class delUserRequest {
+        public Integer id;
     }
 }

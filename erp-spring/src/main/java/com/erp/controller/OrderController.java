@@ -53,11 +53,15 @@ public class OrderController {
                 product.getId());
         Inventory targetInventory = inventoryService.getInventoryByCompanyIdAndProductId(target.getId(),
                 product.getId());
+        if (originInventory.getQuantity() == null) {
+            response.message = "卖方库存不足";
+            return response;
+        }
         if (originInventory.getQuantity() < request.quantity) {
             response.message = "卖方库存不足";
             return response;
         }
-        if (target.getMoney()==null){
+        if (target.getMoney() == null) {
             response.message = "买方余额不足";
             return response;
         }
@@ -67,6 +71,10 @@ public class OrderController {
         }
         Order order = orderService.addOrder(product.getId(), origin.getId(), target.getId(), request.price,
                 request.quantity);
+        if(targetInventory==null){
+            targetInventory = inventoryService.addInventory(target.getId(), product.getId(), 0);
+        }
+
         companyService.updCompany(order.getId(), origin.getMoney() + request.quantity * request.price);
         companyService.updCompany(target.getId(), target.getMoney() - request.quantity * request.price);
         inventoryService.updInventory(originInventory.getId(), originInventory.getQuantity() - request.quantity);
@@ -76,7 +84,6 @@ public class OrderController {
         response.data = order.getId();
         return response;
     }
-    
 
     @GetMapping("/{companyId}/origin")
     public JsonResponse<List<Order>> getOriginOrder(@PathVariable("companyId") Integer companyId) {

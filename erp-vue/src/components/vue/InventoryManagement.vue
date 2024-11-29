@@ -5,6 +5,7 @@
   </div>
   <div v-if="this.permission === 0">
     <h1>库存管理</h1>
+    <p>您仅拥有读权限，无权调整库存。</p>
     <el-table :data="inventories" style="width: 100%">
       <el-table-column prop="productName" label="商品名称" />
       <el-table-column prop="quantity" label="数量" />
@@ -56,7 +57,7 @@ export default {
   },
   methods: {
     async getPermission() {
-      const moduleId = 1;
+      const moduleId = 2;
       const userId = localStorage.getItem('userId');
       const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
       this.permission = response.data.data;

@@ -1,31 +1,49 @@
 <template>
   <div>
-    <h1>采购管理</h1>
-    <el-row :gutter="20" style="margin-bottom: 20px;">
-      <el-col :span="4">
-        <el-input v-model="originName" placeholder="输入卖家名称"></el-input>
-      </el-col>
-      <el-col :span="4">
-        <el-input v-model="productName" placeholder="输入商品名称"></el-input>
-      </el-col>
-      <el-col :span="4">
-        <el-input v-model="price" placeholder="输入商品单价"></el-input>
-      </el-col>
-      <el-col :span="4">
-        <el-input v-model.number="quantity" placeholder="输入商品数量" type="number"></el-input>
-      </el-col>
-      <el-col :span="4">
-        <el-button @click="addOrder">新增订单</el-button>
-      </el-col>
-    </el-row>
-    <el-table :data="orders" style="width: 100%">
-      <el-table-column prop="id" label="订单ID" />
-      <el-table-column prop="productName" label="商品名称" />
-      <el-table-column prop="originName" label="卖家" />
-      <el-table-column prop="quantity" label="数量" />
-      <el-table-column prop="price" label="价格" />
-      <el-table-column prop="money" label="总价" />
-    </el-table>
+    <div v-if="this.permission < 0">
+      <h1>无权限访问</h1>
+      <p>您没有权限访问此页面。</p>
+    </div>
+    <div v-if="this.permission === 0">
+      <h1>采购管理</h1>
+      <p>您只有读权限，无权新建买单</p>
+      <el-table :data="orders" style="width: 100%">
+        <el-table-column prop="id" label="订单ID" />
+        <el-table-column prop="productName" label="商品名称" />
+        <el-table-column prop="originName" label="卖家" />
+        <el-table-column prop="quantity" label="数量" />
+        <el-table-column prop="price" label="价格" />
+        <el-table-column prop="money" label="总价" />
+      </el-table>
+    </div>
+    <div v-if="this.permission > 0">
+      <h1>采购管理</h1>
+      <el-row :gutter="20" style="margin-bottom: 20px;">
+        <el-col :span="4">
+          <el-input v-model="originName" placeholder="输入卖家名称"></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="productName" placeholder="输入商品名称"></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="price" placeholder="输入商品单价"></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model.number="quantity" placeholder="输入商品数量" type="number"></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button @click="addOrder">新增订单</el-button>
+        </el-col>
+      </el-row>
+      <el-table :data="orders" style="width: 100%">
+        <el-table-column prop="id" label="订单ID" />
+        <el-table-column prop="productName" label="商品名称" />
+        <el-table-column prop="originName" label="卖家" />
+        <el-table-column prop="quantity" label="数量" />
+        <el-table-column prop="price" label="价格" />
+        <el-table-column prop="money" label="总价" />
+      </el-table>
+    </div>
   </div>
 </template>
 
@@ -36,6 +54,7 @@ export default {
   name: 'OrderManagement',
   data() {
     return {
+      permission: -1,
       companyId: localStorage.getItem('companyId'),
       orders: [],
       originName: '',
@@ -50,7 +69,7 @@ export default {
   },
   methods: {
     async getPermission() {
-      const moduleId = 3;
+      const moduleId = 4;
       const userId = localStorage.getItem('userId');
       const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
       this.permission = response.data.data;

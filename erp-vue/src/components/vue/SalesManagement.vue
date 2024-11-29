@@ -1,5 +1,21 @@
 <template>
-  <div>
+  <div v-if="this.permission < 0">
+    <h1>无权限访问</h1>
+    <p>您没有权限访问此页面。</p>
+  </div>
+  <div v-if="this.permission === 0">
+    <h1>销售管理</h1>
+    <p>您仅拥有读权限，无权新建卖单</p>
+    <el-table :data="orders" style="width: 100%">
+      <el-table-column prop="id" label="订单ID" />
+      <el-table-column prop="productName" label="商品名称" />
+      <el-table-column prop="targetName" label="买家" />
+      <el-table-column prop="quantity" label="数量" />
+      <el-table-column prop="price" label="价格" />
+      <el-table-column prop="money" label="总价" />
+    </el-table>
+  </div>
+  <div v-if="this.permission > 0">
     <h1>销售管理</h1>
     <el-row :gutter="20" style="margin-bottom: 20px;">
       <el-col :span="4">
@@ -36,6 +52,7 @@ export default {
   name: 'OrderManagement',
   data() {
     return {
+      permission: -1,
       companyId: localStorage.getItem('companyId'),
       orders: [],
       targetName: '',
@@ -50,7 +67,7 @@ export default {
   },
   methods: {
     async getPermission() {
-      const moduleId = 2;
+      const moduleId = 3;
       const userId = localStorage.getItem('userId');
       const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
       this.permission = response.data.data;

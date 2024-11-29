@@ -1,5 +1,25 @@
 <template>
-    <div>
+    <div v-if="this.permission < 0">
+        <h1>无权限访问</h1>
+        <p>您没有权限访问此页面。</p>
+    </div>
+    <div v-if="this.permission === 0">
+        <h1>人员管理</h1>
+        <p>您仅拥有读权限，无权调整权限和注册账号</p>
+        <p>（目前开放三个权限等级，无权限<0，只读权限=0，读写权限>0</0>。）</p>
+        <el-table :data="users" style="width: 100%">
+            <el-table-column prop="userName" label="人员名称" width="150" />
+            <el-table-column label="模块权限列表" width="500">
+                <template v-slot="scope">
+                    <el-table :data="scope.row.permissions" style="width: 100%">
+                        <el-table-column prop="moduleName" label="模块名称" width="200" />
+                        <el-table-column prop="permissionLevel" label="权限等级" width="200" />
+                    </el-table>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div v-if="this.permission > 0">
         <h1>人员管理</h1>
         <p>（目前开放三个权限等级，无权限<0，只读权限=0，读写权限>0</0>。）</p>
 
@@ -67,6 +87,7 @@ export default {
     name: 'WorkerManagement',
     data() {
         return {
+            permission: -1,
             registerDialogVisible: false,
             companyId: localStorage.getItem('companyId'),
             users: [],
@@ -85,7 +106,7 @@ export default {
     },
     methods: {
         async getPermission() {
-            const moduleId = 4;
+            const moduleId = 5;
             const userId = localStorage.getItem('userId');
             const response = await axios.get(`http://localhost:8080/api/permission/${userId}/${moduleId}`);
             this.permission = response.data.data;

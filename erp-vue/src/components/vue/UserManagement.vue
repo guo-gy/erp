@@ -1,5 +1,28 @@
 <template>
-    <div class="user-management">
+    <div v-if="this.permission < 0">
+        <h1>无权限访问</h1>
+        <p>您没有权限访问此页面。</p>
+    </div>
+    <div v-if="this.permission === 0">
+        <el-card>
+            <div slot="header" class="clearfix">
+                <span>用户信息管理</span>
+            </div>
+            <p>您仅拥有读权限，无权修改信息</p>
+            <el-form :model="user" @submit.prevent="saveUserInfo">
+                <el-form-item label="用户名">
+                    <el-input v-model="user.name" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="隶属公司">
+                    <el-input v-model="user.companyName" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="个人简介">
+                    <el-input typr="textarea" v-model="user.description" disabled></el-input>
+                </el-form-item>
+            </el-form>
+        </el-card>
+    </div>
+    <div v-if="this.permission > 0" class="user-management">
         <el-card>
             <div slot="header" class="clearfix">
                 <span>用户信息管理</span>
@@ -28,7 +51,9 @@ import { ElMessage } from 'element-plus';
 export default {
     data() {
         return {
+            permission: -1,
             user: {
+
                 userId: localStorage.getItem('userId'),
                 companyId: localStorage.getItem('companyId'),
                 name: '',

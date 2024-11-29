@@ -58,6 +58,7 @@ export default {
       registerPassword: '',
       registerrePassword: '',
       userId: null,
+      companyId: null
     };
   },
   created() {
@@ -73,22 +74,18 @@ export default {
         password: this.password
       });
       if (response.data.success == true) {
-        ElMessage.success(response.data.message);
+        this.userId = response.data.data;
         localStorage.setItem('userId', response.data.data);
-        this.getCompanyId(response.data.data);
+        const response2 = await axios.get(`http://localhost:8080/api/user/${this.userId}/companyid`);
+        this.companyId = response2.data.data;
+        localStorage.setItem('companyId', response2.data.data);
+        ElMessage.success('登陆成功')
         this.$router.push('/home');
       } else {
         ElMessage.error(response.data.message);
       }
-    },
-    async getCompanyId(userId) {
-      const response = await axios.get(`http://localhost:8080/api/user/${userId}/companyid`);
-      if (response.data.success) {
-        localStorage.setItem('companyId', response.data.data);
-        ElMessage.success(response.data.message);
-      } else {
-        ElMessage.error(response.data.message);
-      }
+
+
     },
     resetRegisterForm() {
       this.registercompanyName = '';

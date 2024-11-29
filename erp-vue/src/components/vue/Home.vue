@@ -16,7 +16,7 @@
         <el-container>
             <el-header>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h1 class="home-title">员工：{{ userName }} (隶属于：{{ companyName }})</h1>
+                    <h1 class="home-title">员工：{{ this.userName }} (隶属于：{{ this.companyName }})</h1>
                     <el-button type="danger" @click="logout">退出登录</el-button>
                 </div>
             </el-header>
@@ -35,14 +35,16 @@ import { ElMessage } from 'element-plus';
 export default {
     data() {
         return {
-            userId: localStorage.getItem('userId'),
-            companyId: localStorage.getItem('companyId'),
+            userId: null,
+            companyId: null,
             activeMenu: 'work-center',
             userName: '获取信息失败',
             companyName: '获取信息失败',
         };
     },
     created() {
+        this.userId = localStorage.getItem('userId');
+        this.companyId = localStorage.getItem('companyId');
         this.getUserName();
         this.getCompanyName();
         this.$router.push(`/home/work-center`);
@@ -52,7 +54,6 @@ export default {
             const response = await axios.get(`http://localhost:8080/api/user/${this.userId}/name`);
             if (response.data.success) {
                 this.userName = response.data.data;
-                ElMessage.success(response.data.message);
             } else {
                 this.logout();
             }
@@ -62,7 +63,6 @@ export default {
             if (response.data.success) {
                 this.companyName = response.data.data;
                 localStorage.setItem('companyName', response.data.data);
-                ElMessage.success(response.data.message);
             } else {
                 ElMessage.error(response.data.message);
             }
@@ -71,6 +71,8 @@ export default {
             this.$router.push(`/home/${key}`);
         },
         async logout() {
+            localStorage.removeItem('companyId');
+            localStorage.removeItem('companyName');
             localStorage.removeItem('userId');
             this.$router.push('/');
         },

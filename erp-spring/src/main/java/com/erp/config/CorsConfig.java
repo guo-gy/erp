@@ -24,4 +24,7 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedHeaders("*") // 允许的请求头
                 .allowCredentials(true); // 允许携带凭证
     }
+
+
+    
 }
